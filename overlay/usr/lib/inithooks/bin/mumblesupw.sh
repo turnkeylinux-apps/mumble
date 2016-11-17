@@ -9,5 +9,5 @@ password=$1
 murmurd -ini /etc/mumble-server.ini -supw $password
 
 #Restart Mumble after mumble-server.ini after changes
-systemctl restart mumble-server.service
+service mumble-server restart
 

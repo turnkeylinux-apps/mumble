@@ -20,7 +20,7 @@ sed -i s$'\001'secretsetatfirstboot$'\001'$password$'\001''g' /var/www/phpMumble
 
 
 #Restart Mumble after mumble-server.ini changes
-systemctl restart mumble-server.service
+service mumble-server restart
 
 #Restart Apache
-systemctl restart apache2.service
+service apache2 restart
