@@ -1,0 +1,7 @@
+Web Menu:       http://$ipaddr
+phpMumbleAdmin  https://$ipaddr
+MyMumb Panel:   https://$ipaddr:444
+Mumble Server   $ipaddr:64738
+Web shell:      https://$ipaddr:12320
+Webmin:         https://$ipaddr:12321
+SSH/SFTP:       root@$ipaddr (port 22)

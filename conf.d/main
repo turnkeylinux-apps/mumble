@@ -1,0 +1,166 @@
+#!/bin/sh -ex
+
+#Retrieve latest MyMumb-Panel Web Interface for MurMur/Mumble Server
+wget "https://github.com/dieonar/MyMumb-Panel/archive/master.zip" -O /var/www/MyMumb.zip
+
+#Retrieve latest phpMumbleAdmin
+wget "http://downloads.sourceforge.net/project/phpmumbleadmin/phpMumbleAdmin-0.4.4.zip" -O /var/www/phpMumbleAdmin.zip
+
+#Unzip MyMumb-Panel Web Interface
+unzip /var/www/MyMumb.zip -d /var/www
+#Remove zip file of MyMumb-Panel
+rm /var/www/MyMumb.zip
+#Move to Friendly Directory Name
+mv /var/www/MyMumb-Panel-master /var/www/MyMumb
+#Fix/Ensure Correct Permissions 
+chown -R www-data:www-data /var/www/MyMumb
+#Move Correct MyMumb Web Interface PHP file into place
+mv "/var/www/MyMumb/inc/Murmur ICE 3.5.1.php" /var/www/MyMumb/inc/Murmur.php
+
+#Setup phpMumbleAdmin
+#Unzip phpMumbleAdmin
+unzip /var/www/phpMumbleAdmin.zip -d /var/www
+#Remove zip file of phpMumbleAdmin
+rm /var/www/phpMumbleAdmin.zip
+#Move to Friendly Directory Name
+mv /var/www/phpMumble* /var/www/phpMumbleAdmin
+#Fix/Ensure Correct Permissions Preferred by PHPMumbleAdmin
+chown -R www-data:www-data /var/www/phpMumbleAdmin
+chmod 555 /var/www/phpMumbleAdmin/cache/index.html 
+chmod 555 /var/www/phpMumbleAdmin/config/.htaccess 
+chmod 555 /var/www/phpMumbleAdmin/config/index.html 
+chmod 555 /var/www/phpMumbleAdmin/logs/.htaccess
+chmod 555 /var/www/phpMumbleAdmin/logs/index.html
+chmod 555 /var/www/phpMumbleAdmin/program/cache/index.html
+chmod 555 /var/www/phpMumbleAdmin/program/cache/sessions/index.html
+#Remove Install Due To Config File Bypass
+rm -rf /var/www/phpMumbleAdmin/install
+
+#Create profiles.php with default parameters (no secret -- set at firt boot)
+#My Preferred method over Live Http Headers Method (Tricky here anyway as you would have to be logged into the web app to complete config)
+cat > /var/www/phpMumbleAdmin/config/profiles.php << EOF
+<?php
+
+if (! defined('PMA_STARTED')) { die('ILLEGAL: You cannot call this script directly !'); }
+
+\$array = array(
+    0 => array(
+	'id' => 1,
+	'name' => 'Default',
+	'public' => true,
+	'host' => '127.0.0.1',
+	'port' => 6502,
+	'timeout' => 10,
+	'secret' => 'secretreplacedatfirstboot',
+	'slice_profile' => '',
+	'slice_php' => 'Murmur-1.2.8.php',
+	'http-addr' => '',
+    ),
+);
+EOF
+
+#Create config.php (no password -- set at first boot -- password is Blowfish hash 22 character seed)
+#phpMumbleAdminSetup.php created that is called to input password first boot. Could use python but would require additional libraries (bcrypt) PHP used as easy shortcut.
+#My Preferred method over Live Http Headers Method
+cat > /var/www/phpMumbleAdmin/config/config.php << EOF
+<?php
+
+if (! defined('PMA_STARTED')) { die('ILLEGAL: You cannot call this script directly !'); }
+
+\$array = array(
+    'SA_login' => 'superuser',
+    'SA_pw' => 'passwordreplacedatfirstboot',
+    'siteTitle' => 'PhpMumbleAdmin !',
+    'siteComment' => 'A murmur administration panel...',
+    'default_profile' => 1,
+    'allowOfflineAuth' => false,
+    'SU_auth' => false,
+    'SU_edit_user_pw' => false,
+    'SU_start_vserver' => false,
+    'SU_ru_active' => false,
+    'RU_auth' => false,
+    'RU_delete_account' => false,
+    'RU_edit_login' => false,
+    'pw_gen_active' => false,
+    'pw_gen_explicit_msg' => false,
+    'pw_gen_pending' => 2,
+    'pw_gen_sender_email' => '',
+    'vlogs_size' => 5000,
+    'vlogs_admins_active' => true,
+    'vlogs_admins_highlights' => false,
+    'pmaLogs_keep' => 0,
+    'pmaLogs_SA_actions' => true,
+    'table_overview' => 10,
+    'table_users' => 10,
+    'table_bans' => 10,
+    'ddl_auth_page' => false,
+    'ddl_refresh' => 1,
+    'ddl_show_cache_uptime' => true,
+    'autoban_attempts' => 10,
+    'autoban_frame' => 120,
+    'autoban_duration' => 300,
+    'auto_logout' => 15,
+    'update_check' => 1,
+    'smtp_host' => '127.0.0.1',
+    'smtp_port' => 25,
+    'smtp_default_sender_email' => '',
+    'show_total_users' => true,
+    'show_total_users_sa' => false,
+    'show_online_users' => true,
+    'show_online_users_sa' => false,
+    'show_uptime' => true,
+    'show_uptime_sa' => false,
+    'show_avatar_sa' => true,
+    'murmur_version_url' => false,
+    'external_viewer_enable' => false,
+    'external_viewer_width' => 200,
+    'external_viewer_height' => 400,
+    'external_viewer_vertical' => true,
+    'external_viewer_scroll' => true,
+    'default_lang' => 'en_EN',
+    'default_skin' => 'default.css',
+    'default_timezone' => 'UTC',
+    'default_time' => 'h:i A',
+    'default_date' => '%d %b %Y',
+    'defaultSystemLocales' => '',
+    'default_uptime' => 2,
+    'systemLocalesProfiles' => array(),
+    'IcePhpIncludePath' => '',
+    'debug' => 0,
+    'debug_session' => false,
+    'debug_object' => false,
+    'debug_select_flag' => false,
+    'debug_stats' => false,
+    'debug_messages' => false,
+    'debug_email_to' => '',
+);
+EOF
+chown www-data:www-data /var/www/phpMumbleAdmin/config/config.php
+chown www-data:www-data /var/www/phpMumbleAdmin/config/profiles.php
+#Enable Apache Rewrite
+a2enmod rewrite
+
+#Enable Web Control Panel and Mumble Control Panel Disable default site
+a2ensite MyMumb.conf
+a2ensite phpMumbleAdmin.conf
+a2ensite tk-webcp.conf
+a2dissite 000-default.conf
+
+#Cleanup Files From Common Overlays and Move into place
+mv /var/www/js /var/www/tk-webcp
+mv /var/www/css /var/www/tk-webcp
+mv /var/www/images/* /var/www/tk-webcp/images
+rm -rf /var/www/images
+
+#Fancy Up The Default Mumble Server welcome text For TurnKey Linux
+#Adding additional information about preconfigured ports (temporary) until workaround.
+sed -i '147s/.*/registerName=TurnKeyLinux Mumble Server/g' /etc/mumble-server.ini
+
+#Add Required Lines to 20-IcePHP.ini for MyMumb-Panel Web Interface
+echo 'include_path=/usr/share/Ice-3.5.1/php/lib' >> /etc/php5/apache2/conf.d/20-IcePHP.ini
+
+#Enable ice interface for mumble in mumble-server.ini for MyMumb-Panel Web Interface
+sed -i 's/#ice="tcp -h 127.0.0.1 -p 6502"/ice="tcp -h 127.0.0.1 -p 6502"/g' /etc/mumble-server.ini
+
+#Setup Autoboot of murmurdautofirewall
+update-rc.d murmurdautofirewall defaults
