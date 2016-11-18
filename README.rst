@@ -1,4 +1,4 @@
-Mumble Server/MurMur - MyMumb-Panel Web Interface
+Mumble Server - MyMumb-Panel and phpMumbleAdmin Web Interfaces
 =======================================================
 
 Mumble is an open source, low-latency, high quality voice chat 
@@ -22,10 +22,17 @@ Features:
 
 - MyMumb-Panel Web Interface for managing multiple mumble servers
    
+- phpMumbleAdmin Web Interface for managing multiple mumble servers
+
+- Automatic firewall editing to automate port opening for mumble server instances
+
+- Default Mumble port 64738 open by default (Amazon EC2 users will need to open additional manually)
+
 Credentials *(passwords set at first boot)*
 -------------------------------------------
 
 -  MyMumb-Panel/icesecretwrite
+-  phpMumbleAdmin: username superuser
 -  Webmin: username root
 -  SSH: username root
 -  Mumble Server: username SuperUser
