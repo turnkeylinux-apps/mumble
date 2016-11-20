@@ -34,7 +34,7 @@ def main():
     if not password:
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
-            "Mumble Ice Secret Write For MyMumb-Panel Web Interface",
+            "Mumble Ice Secret Write For Using Web Interfaces",
             "Enter icesecretwrite.")
 	subprocess.call('/usr/lib/inithooks/bin/icesecretset.sh %s' % (str(password)), shell=True)
 
