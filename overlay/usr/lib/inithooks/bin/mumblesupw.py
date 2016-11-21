@@ -36,7 +36,8 @@ def main():
         password = d.get_password(
             "Mumble Server SuperUser Password",
             "Enter SuperUser Password.")
-	subprocess.call('/usr/lib/inithooks/bin/mumblesupw.sh %s' % (str(password)), shell=True)
+    
+    subprocess.call('/usr/lib/inithooks/bin/mumblesupw.sh %s' % (str(password)), shell=True)
 
 if __name__ == "__main__":
     main()

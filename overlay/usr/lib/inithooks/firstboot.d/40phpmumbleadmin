@@ -4,4 +4,4 @@
 . /etc/default/inithooks
 
 [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
-$INITHOOKS_PATH/bin/phpmumbleadmin.py
+$INITHOOKS_PATH/bin/phpmumbleadmin.py --pass="$PHP_MAPW"

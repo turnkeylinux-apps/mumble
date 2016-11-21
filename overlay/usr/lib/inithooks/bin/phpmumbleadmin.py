@@ -39,7 +39,8 @@ def main():
 	"""PHP used to prevent additional install of python modules for bcrypt"""
 	"""Using present convention of passing to bash for sed statement execution"""
         """PY pass PHP pass BASH"""
-	subprocess.call('php /usr/lib/inithooks/bin/phpmumbleadmin.php %s' % (str(password)), shell=True)
+
+    subprocess.call('php /usr/lib/inithooks/bin/phpmumbleadmin.php %s' % (str(password)), shell=True)
 
 if __name__ == "__main__":
     main()

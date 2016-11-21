@@ -5,4 +5,4 @@
 . /etc/default/inithooks
 
 [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
-$INITHOOKS_PATH/bin/mumblesupw.py
+$INITHOOKS_PATH/bin/mumblesupw.py --pass="$MUMBLE_PW"
