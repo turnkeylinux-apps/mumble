@@ -6,6 +6,7 @@ Option:
 
 import sys
 import getopt
+import inithooks_cache
 import subprocess
 
 from dialog_wrapper import Dialog
