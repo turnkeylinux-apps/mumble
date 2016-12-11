@@ -1,13 +1,8 @@
 #include <turnkey/base>
+#include <turnkey/lamp>
 
-apache2			#Apache for MyMumb-Panel Web Interface
-apache2-utils		#Apache Utils for MyMumb-Panel Web Interface
+php-zeroc-ice
+mumble-server
 
-php5			#PHP for MyMumb-Panel Web Interface
-libapache2-mod-php5	#Apache/PHP for MyMumb-Panel Web Interface
-
-php-zeroc-ice           #MyMumb-Panel Web Interface Dependency
-mumble-server           #Latest Mumble From Repo
-
-daemon			#Firewall monitor
-chkconfig		#Firewall monitor
+daemon
+python-bcrypt
