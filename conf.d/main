@@ -1,49 +1,32 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
-#Retrieve latest MyMumb-Panel Web Interface for MurMur/Mumble Server
-wget "https://github.com/dieonar/MyMumb-Panel/archive/master.zip" -O /var/www/MyMumb.zip
+SRC=/usr/local/src
+WEBROOT=/var/www
 
-#Retrieve latest phpMumbleAdmin
-wget "http://downloads.sourceforge.net/project/phpmumbleadmin/phpMumbleAdmin-0.4.4.zip" -O /var/www/phpMumbleAdmin.zip
-
-#Unzip MyMumb-Panel Web Interface
-unzip /var/www/MyMumb.zip -d /var/www
-#Remove zip file of MyMumb-Panel
-rm /var/www/MyMumb.zip
-#Move to Friendly Directory Name
+unzip $SRC/master.zip -d /var/www
+rm $SRC/master.zip
 mv /var/www/MyMumb-Panel-master /var/www/MyMumb
-#Fix/Ensure Correct Permissions 
 chown -R www-data:www-data /var/www/MyMumb
-#Move Correct MyMumb Web Interface PHP file into place
-mv "/var/www/MyMumb/inc/Murmur ICE 3.5.1.php" /var/www/MyMumb/inc/Murmur.php
+cp "/var/www/MyMumb/inc/Murmur ICE 3.5.1.php" /var/www/MyMumb/inc/Murmur.php
 
-#Setup phpMumbleAdmin
-#Unzip phpMumbleAdmin
-unzip /var/www/phpMumbleAdmin.zip -d /var/www
-#Remove zip file of phpMumbleAdmin
-rm /var/www/phpMumbleAdmin.zip
-#Move to Friendly Directory Name
+unzip $SRC/phpMumbleAdmin-*.zip -d /var/www
+rm $SRC/phpMumbleAdmin-*.zip
 mv /var/www/phpMumble* /var/www/phpMumbleAdmin
-#Fix/Ensure Correct Permissions Preferred by PHPMumbleAdmin
 chown -R www-data:www-data /var/www/phpMumbleAdmin
-chmod 555 /var/www/phpMumbleAdmin/cache/index.html 
-chmod 555 /var/www/phpMumbleAdmin/config/.htaccess 
-chmod 555 /var/www/phpMumbleAdmin/config/index.html 
-chmod 555 /var/www/phpMumbleAdmin/logs/.htaccess
-chmod 555 /var/www/phpMumbleAdmin/logs/index.html
-chmod 555 /var/www/phpMumbleAdmin/program/cache/index.html
-chmod 555 /var/www/phpMumbleAdmin/program/cache/sessions/index.html
-#Remove Install Due To Config File Bypass
 rm -rf /var/www/phpMumbleAdmin/install
+
+for i in cache/index.html config/.htaccess config/index.html logs/.htaccess logs/index.html program/cache/index.html; do
+    chmod 555 "$WEBROOT/phpMumbleAdmin/$i"
+done
 
 #Create profiles.php with default parameters (no secret -- set at firt boot)
 #My Preferred method over Live Http Headers Method (Tricky here anyway as you would have to be logged into the web app to complete config)
-cat > /var/www/phpMumbleAdmin/config/profiles.php << EOF
+cat > /var/www/phpMumbleAdmin/config/profiles.php << 'EOF'
 <?php
 
-if (! defined('PMA_STARTED')) { die('ILLEGAL: You cannot call this script directly !'); }
+if (! defined('PMA_STARTED')) { die('ERROR: You cannot call this script directly !'); }
 
-\$array = array(
+$array = array(
     0 => array(
 	'id' => 1,
 	'name' => 'Default',
@@ -61,13 +44,12 @@ EOF
 
 #Create config.php (no password -- set at first boot -- password is Blowfish hash 22 character seed)
 #phpMumbleAdminSetup.php created that is called to input password first boot. Could use python but would require additional libraries (bcrypt) PHP used as easy shortcut.
-#My Preferred method over Live Http Headers Method
-cat > /var/www/phpMumbleAdmin/config/config.php << EOF
+cat > /var/www/phpMumbleAdmin/config/config.php << 'EOF'
 <?php
 
-if (! defined('PMA_STARTED')) { die('ILLEGAL: You cannot call this script directly !'); }
+if (! defined('PMA_STARTED')) { die('ERROR: You cannot call this script directly !'); }
 
-\$array = array(
+$array = array(
     'SA_login' => 'superuser',
     'SA_pw' => 'passwordreplacedatfirstboot',
     'siteTitle' => 'PhpMumbleAdmin !',
@@ -125,7 +107,7 @@ if (! defined('PMA_STARTED')) { die('ILLEGAL: You cannot call this script direct
     'defaultSystemLocales' => '',
     'default_uptime' => 2,
     'systemLocalesProfiles' => array(),
-    'IcePhpIncludePath' => '',
+    'IcePhpIncludePath' => '/usr/share/Ice-3.5.1/php/lib',
     'debug' => 0,
     'debug_session' => false,
     'debug_object' => false,
@@ -135,32 +117,28 @@ if (! defined('PMA_STARTED')) { die('ILLEGAL: You cannot call this script direct
     'debug_email_to' => '',
 );
 EOF
-chown www-data:www-data /var/www/phpMumbleAdmin/config/config.php
-chown www-data:www-data /var/www/phpMumbleAdmin/config/profiles.php
-#Enable Apache Rewrite
+
+chown www-data:www-data /var/www/phpMumbleAdmin/config/{config,profiles}.php
+
 a2enmod rewrite
 
-#Enable Web Control Panel and Mumble Control Panel Disable default site
+a2dissite 000-default.conf
 a2ensite MyMumb.conf
 a2ensite phpMumbleAdmin.conf
-a2ensite tk-webcp.conf
-a2dissite 000-default.conf
+a2ensite tkl-webcp.conf
 
-#Cleanup Files From Common Overlays and Move into place
-mv /var/www/js /var/www/tk-webcp
-mv /var/www/css /var/www/tk-webcp
-mv /var/www/images/* /var/www/tk-webcp/images
+mv /var/www/js /var/www/tkl-webcp
+mv /var/www/css /var/www/tkl-webcp
+mv /var/www/images/* /var/www/tkl-webcp/images
 rm -rf /var/www/images
 
-#Fancy Up The Default Mumble Server welcome text For TurnKey Linux
 #Adding additional information about preconfigured ports (temporary) until workaround.
-sed -i '147s/.*/registerName=TurnKeyLinux Mumble Server/g' /etc/mumble-server.ini
+sed -i 's/^\(registerName=\)/\1TurnKey Mumble Server/g' /etc/mumble-server.ini
 
-#Add Required Lines to 20-IcePHP.ini for MyMumb-Panel Web Interface
+php5enmod IcePHP
 echo 'include_path=/usr/share/Ice-3.5.1/php/lib' >> /etc/php5/apache2/conf.d/20-IcePHP.ini
 
 #Enable ice interface for mumble in mumble-server.ini for MyMumb-Panel Web Interface
-sed -i 's/#ice="tcp -h 127.0.0.1 -p 6502"/ice="tcp -h 127.0.0.1 -p 6502"/g' /etc/mumble-server.ini
+sed -i 's/#\(ice="tcp -h 127.0.0.1 -p 6502"\)/\1/g' /etc/mumble-server.ini
 
-#Setup Autoboot of murmurdautofirewall
-update-rc.d murmurdautofirewall defaults
+systemctl enable murmurdautofirewall || update-rc.d murmurdautofirewall defaults
