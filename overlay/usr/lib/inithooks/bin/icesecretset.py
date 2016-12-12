@@ -6,9 +6,8 @@ Option:
 
 import sys
 import getopt
-import inithooks_cache
-import subprocess
 
+from executil import system
 from dialog_wrapper import Dialog
 
 def usage(s=None):
@@ -38,7 +37,12 @@ def main():
             "Mumble Ice Secret Write For Using Web Interfaces",
             "Enter icesecretwrite.")
     
-    subprocess.call('/usr/lib/inithooks/bin/icesecretset.sh %s' % (str(password)), shell=True)
+    system('sed', '-i', "s/^\(icesecretwrite=\).*$/\1'%s'/" % password, '/etc/mumble-server.ini')
+    system('sed', '-i', "s/^\(\$MyConfig['ICE_Password'] =\).*$/\1 '%s'/" % password, '/var/www/MyMumb/inc/config.inc.php')
+    system('sed', '-i', "s/^\( *'secret' =>\) .*$/\1 '%s'/" % password, '/var/www/phpMumbleAdmin/config/profiles.php')
+
+    for i in ('mumble-server', 'apache2'):
+        system('service', i, 'restart')
 
 if __name__ == "__main__":
     main()

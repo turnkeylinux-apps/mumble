@@ -6,9 +6,9 @@ Option:
 
 import sys
 import getopt
-import inithooks_cache
-import subprocess
+import bcrypt
 
+from executil import system
 from dialog_wrapper import Dialog
 
 def usage(s=None):
@@ -35,13 +35,11 @@ def main():
     if not password:
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
-            "phpMumbleAdmin SuperUser Password",
+            "phpMumbleAdmin superuser Password",
             "Enter SuperUser Password.")
-	"""PHP used to prevent additional install of python modules for bcrypt"""
-	"""Using present convention of passing to bash for sed statement execution"""
-        """PY pass PHP pass BASH"""
 
-    subprocess.call('php /usr/lib/inithooks/bin/phpmumbleadmin.php %s' % (str(password)), shell=True)
+    hashpw = bcrypt.hashpw(password, bcrypt.gensalt())
+    system('sed', '-i', "s#^\( *'SA_pw' =>\) .*$#\\1 '%s',#" % hashpw, '/var/www/phpMumbleAdmin/config/config.php')
 
 if __name__ == "__main__":
     main()

@@ -1,14 +1,13 @@
 #!/usr/bin/python
-"""Set Mumble Server Default Super User password and Edit Config Files
+"""Set Mumble Server Default Super User password
 Option:
     --pass=     unless provided, will ask interactively
 """
 
 import sys
 import getopt
-import inithooks_cache
-import subprocess
 
+from executil import system
 from dialog_wrapper import Dialog
 
 def usage(s=None):
@@ -38,7 +37,8 @@ def main():
             "Mumble Server SuperUser Password",
             "Enter SuperUser Password.")
     
-    subprocess.call('/usr/lib/inithooks/bin/mumblesupw.sh %s' % (str(password)), shell=True)
+    system('murmurd', '-ini', '/etc/mumble-server.ini', '-supw', password)
+    system('service', 'mumble-server', 'restart')
 
 if __name__ == "__main__":
     main()
