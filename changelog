@@ -1,12 +1,14 @@
-turnkey-mumble-14.1 (1) turnkey; urgency=low
+turnkey-mumble-14.2 (1) turnkey; urgency=low
 
   * Mumble:
 
-    - Initial Commit modified from core.
+    - Initial release of Zoneminder appliance, modified from Core.
 
-    - Install MyMumb-Panel from github repository
+    - Mumble-server & dependancies installed from Debian stable.
+
+    - MyMumb-Panel installed from github repository.
 
   * Note: Please refer to turnkey-core's changelog for changes common to all
     appliances. Here we only describe changes specific to this appliance.
 
- -- Michael Gurevich <mg@tapbop.com>  Sun, 06 Nov 2016 14:22:31 EST
+ -- Michael Gurevich <mg@tapbop.com>  Sun, 30 Apr 2017 14:22:31 -0400
