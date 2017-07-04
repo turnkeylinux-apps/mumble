@@ -1,5 +1,5 @@
-Mumble Server - MyMumb-Panel and phpMumbleAdmin Web Interfaces
-=======================================================
+Mumble Server - the open source VoIP solution
+=============================================
 
 Mumble is an open source, low-latency, high quality voice chat 
 software primarily intended for use while gaming. Mumble is 
@@ -14,9 +14,8 @@ control groups (ACLs) and can be configured programmatically via
 RPC. A single Murmur daemon can also run multiple Murmur servers 
 on different TCP/UDP ports.
 
-Features:
-
-- Includes all the standard features in TurnKey Core
+This appliance includes all the standard features in `TurnKey Core`_,
+and on top of that:
 
 - Mumble Server/MurMur
 
@@ -31,8 +30,8 @@ Features:
 Credentials *(passwords set at first boot)*
 -------------------------------------------
 
+-  Webmin, SSH: username **root**
+-  phpMumbleAdmin, Mumble Server: username **superuser**
 -  MyMumb-Panel/icesecretwrite
--  phpMumbleAdmin: username superuser
--  Webmin: username root
--  SSH: username root
--  Mumble Server: username SuperUser
+
+.. _TurnKey Core: https://www.turnkeylinux.org/core
