@@ -2,7 +2,7 @@ turnkey-mumble-14.2 (1) turnkey; urgency=low
 
   * Mumble:
 
-    - Initial release of Zoneminder appliance, modified from Core.
+    - Initial release of Mumble appliance, modified from Core.
 
     - Mumble-server & dependancies installed from Debian stable.
 
