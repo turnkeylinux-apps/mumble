@@ -1,3 +1,9 @@
+turnkey-mumble-14.3 (1) turnkey; urgency=low
+
+  * remove mysql - unneeded service and potential security vulnerability.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Tue, 21 Nov 2017 21:35:38 +1100
+
 turnkey-mumble-14.2 (1) turnkey; urgency=low
 
   * Mumble:

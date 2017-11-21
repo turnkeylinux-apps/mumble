@@ -1,5 +1,12 @@
 #include <turnkey/base>
-#include <turnkey/lamp>
+
+apache2
+webmin-apache
+
+php5
+libapache2-mod-php5
+webmin-phpini
+libperl4-corelibs-perl /* php-common depends (via lsof) */
 
 php-zeroc-ice
 mumble-server
