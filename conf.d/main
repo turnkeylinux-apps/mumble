@@ -19,7 +19,5 @@ sed -i 's/^\(registerName=\)/\1TurnKey Mumble Server/g' /etc/mumble-server.ini
 phpenmod IcePHP
 echo 'include_path=/usr/share/php/Ice' >> /etc/php/7.0/apache2/conf.d/20-IcePHP.ini
 
-#Enable ice interface for mumble in mumble-server.ini for MyMumb-Panel Web Interface
-sed -i 's/#\(ice="tcp -h 127.0.0.1 -p 6502"\)/\1/g' /etc/mumble-server.ini
 systemctl enable murmurdautofirewall || update-rc.d murmurdautofirewall defaults
 

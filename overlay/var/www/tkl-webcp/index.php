@@ -43,6 +43,7 @@
                     </div>
                     <div></div>
                     <div></div>
+                    <div></div>
                 <h2>Resources and references</h2>
                     <ul>
                        <li>
