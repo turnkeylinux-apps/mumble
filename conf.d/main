@@ -10,6 +10,7 @@ a2ensite tkl-webcp.conf
 
 mv /var/www/js /var/www/tkl-webcp
 mv /var/www/css /var/www/tkl-webcp
+mkdir /var/www/tkl-webcp/images
 mv /var/www/images/* /var/www/tkl-webcp/images
 rm -rf /var/www/images
 
