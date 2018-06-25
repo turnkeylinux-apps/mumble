@@ -38,8 +38,6 @@ def main():
             "Enter icesecretwrite.")
     
     system('sed', '-i', "s/^\(icesecretwrite=\).*$/\1'%s'/" % password, '/etc/mumble-server.ini')
-    system('sed', '-i', "s/^\(\$MyConfig['ICE_Password'] =\).*$/\1 '%s'/" % password, '/var/www/MyMumb/inc/config.inc.php')
-    system('sed', '-i', "s/^\( *'secret' =>\) .*$/\1 '%s'/" % password, '/var/www/phpMumbleAdmin/config/profiles.php')
 
     for i in ('mumble-server', 'apache2'):
         system('service', i, 'restart')

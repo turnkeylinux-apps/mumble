@@ -3,142 +3,22 @@
 SRC=/usr/local/src
 WEBROOT=/var/www
 
-unzip $SRC/master.zip -d /var/www
-rm $SRC/master.zip
-mv /var/www/MyMumb-Panel-master /var/www/MyMumb
-chown -R www-data:www-data /var/www/MyMumb
-cp "/var/www/MyMumb/inc/Murmur ICE 3.5.1.php" /var/www/MyMumb/inc/Murmur.php
-
-unzip $SRC/phpMumbleAdmin-*.zip -d /var/www
-rm $SRC/phpMumbleAdmin-*.zip
-mv /var/www/phpMumble* /var/www/phpMumbleAdmin
-chown -R www-data:www-data /var/www/phpMumbleAdmin
-rm -rf /var/www/phpMumbleAdmin/install
-
-for i in cache/index.html config/.htaccess config/index.html logs/.htaccess logs/index.html program/cache/index.html; do
-    chmod 555 "$WEBROOT/phpMumbleAdmin/$i"
-done
-
-#Create profiles.php with default parameters (no secret -- set at firt boot)
-#My Preferred method over Live Http Headers Method (Tricky here anyway as you would have to be logged into the web app to complete config)
-cat > /var/www/phpMumbleAdmin/config/profiles.php << 'EOF'
-<?php
-
-if (! defined('PMA_STARTED')) { die('ERROR: You cannot call this script directly !'); }
-
-$array = array(
-    0 => array(
-	'id' => 1,
-	'name' => 'Default',
-	'public' => true,
-	'host' => '127.0.0.1',
-	'port' => 6502,
-	'timeout' => 10,
-	'secret' => 'secretreplacedatfirstboot',
-	'slice_profile' => '',
-	'slice_php' => 'Murmur-1.2.8.php',
-	'http-addr' => '',
-    ),
-);
-EOF
-
-#Create config.php (no password -- set at first boot -- password is Blowfish hash 22 character seed)
-#phpMumbleAdminSetup.php created that is called to input password first boot. Could use python but would require additional libraries (bcrypt) PHP used as easy shortcut.
-cat > /var/www/phpMumbleAdmin/config/config.php << 'EOF'
-<?php
-
-if (! defined('PMA_STARTED')) { die('ERROR: You cannot call this script directly !'); }
-
-$array = array(
-    'SA_login' => 'superuser',
-    'SA_pw' => 'passwordreplacedatfirstboot',
-    'siteTitle' => 'PhpMumbleAdmin !',
-    'siteComment' => 'A murmur administration panel...',
-    'default_profile' => 1,
-    'allowOfflineAuth' => false,
-    'SU_auth' => false,
-    'SU_edit_user_pw' => false,
-    'SU_start_vserver' => false,
-    'SU_ru_active' => false,
-    'RU_auth' => false,
-    'RU_delete_account' => false,
-    'RU_edit_login' => false,
-    'pw_gen_active' => false,
-    'pw_gen_explicit_msg' => false,
-    'pw_gen_pending' => 2,
-    'pw_gen_sender_email' => '',
-    'vlogs_size' => 5000,
-    'vlogs_admins_active' => true,
-    'vlogs_admins_highlights' => false,
-    'pmaLogs_keep' => 0,
-    'pmaLogs_SA_actions' => true,
-    'table_overview' => 10,
-    'table_users' => 10,
-    'table_bans' => 10,
-    'ddl_auth_page' => false,
-    'ddl_refresh' => 1,
-    'ddl_show_cache_uptime' => true,
-    'autoban_attempts' => 10,
-    'autoban_frame' => 120,
-    'autoban_duration' => 300,
-    'auto_logout' => 15,
-    'update_check' => 1,
-    'smtp_host' => '127.0.0.1',
-    'smtp_port' => 25,
-    'smtp_default_sender_email' => '',
-    'show_total_users' => true,
-    'show_total_users_sa' => false,
-    'show_online_users' => true,
-    'show_online_users_sa' => false,
-    'show_uptime' => true,
-    'show_uptime_sa' => false,
-    'show_avatar_sa' => true,
-    'murmur_version_url' => false,
-    'external_viewer_enable' => false,
-    'external_viewer_width' => 200,
-    'external_viewer_height' => 400,
-    'external_viewer_vertical' => true,
-    'external_viewer_scroll' => true,
-    'default_lang' => 'en_EN',
-    'default_skin' => 'default.css',
-    'default_timezone' => 'UTC',
-    'default_time' => 'h:i A',
-    'default_date' => '%d %b %Y',
-    'defaultSystemLocales' => '',
-    'default_uptime' => 2,
-    'systemLocalesProfiles' => array(),
-    'IcePhpIncludePath' => '/usr/share/Ice-3.5.1/php/lib',
-    'debug' => 0,
-    'debug_session' => false,
-    'debug_object' => false,
-    'debug_select_flag' => false,
-    'debug_stats' => false,
-    'debug_messages' => false,
-    'debug_email_to' => '',
-);
-EOF
-
-chown www-data:www-data /var/www/phpMumbleAdmin/config/{config,profiles}.php
-
 a2enmod rewrite
 
 a2dissite 000-default.conf
-a2ensite MyMumb.conf
-a2ensite phpMumbleAdmin.conf
 a2ensite tkl-webcp.conf
 
 mv /var/www/js /var/www/tkl-webcp
 mv /var/www/css /var/www/tkl-webcp
+mkdir /var/www/tkl-webcp/images
 mv /var/www/images/* /var/www/tkl-webcp/images
 rm -rf /var/www/images
 
 #Adding additional information about preconfigured ports (temporary) until workaround.
 sed -i 's/^\(registerName=\)/\1TurnKey Mumble Server/g' /etc/mumble-server.ini
 
-php5enmod IcePHP
-echo 'include_path=/usr/share/Ice-3.5.1/php/lib' >> /etc/php5/apache2/conf.d/20-IcePHP.ini
-
-#Enable ice interface for mumble in mumble-server.ini for MyMumb-Panel Web Interface
-sed -i 's/#\(ice="tcp -h 127.0.0.1 -p 6502"\)/\1/g' /etc/mumble-server.ini
+phpenmod IcePHP
+echo 'include_path=/usr/share/php/Ice' >> /etc/php/7.0/apache2/conf.d/20-IcePHP.ini
 
 systemctl enable murmurdautofirewall || update-rc.d murmurdautofirewall defaults
+

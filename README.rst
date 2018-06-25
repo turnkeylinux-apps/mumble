@@ -19,19 +19,12 @@ and on top of that:
 
 - Mumble Server/MurMur
 
-- MyMumb-Panel Web Interface for managing multiple mumble servers
-   
-- phpMumbleAdmin Web Interface for managing multiple mumble servers
-
-- Automatic firewall editing to automate port opening for mumble server instances
-
 - Default Mumble port 64738 open by default (Amazon EC2 users will need to open additional manually)
 
 Credentials *(passwords set at first boot)*
 -------------------------------------------
 
 -  Webmin, SSH: username **root**
--  phpMumbleAdmin, Mumble Server: username **superuser**
--  MyMumb-Panel/icesecretwrite
+-  Mumble Server: username **superuser**
 
 .. _TurnKey Core: https://www.turnkeylinux.org/core

@@ -31,17 +31,7 @@
 
             <div id="cp">
                 <div class="fragment-content">
-                    <div>
-                        <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>:443"><img
-                        src="images/tkmumblelogosmall.png"/>phpMumbleAdmin Panel</a>
-                    </div>
-		    <div>
-                        <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>:444"><img
-                        src="images/tkmumblelogosmall.png"/>MyMumble Panel</a>
-                    </div>
-	            <div>
+                   <div>
                         <a href="https://<?php print
                         $_SERVER{'HTTP_HOST'}; ?>:12320"><img
                         src="images/shell.png"/>Web Shell</a>
@@ -53,13 +43,10 @@
                     </div>
                     <div></div>
                     <div></div>
+                    <div></div>
                 <h2>Resources and references</h2>
                     <ul>
-                        <li>
-                          <a href="https://github.com/dieonar/MyMumb-Panel">
-			  MyMumb-Panel</a>
-                        </li>
-                        <li>
+                       <li>
                           <a href="https://www.mumble.info">
 			  Mumble and Mumble Server</a>
                         </li>
