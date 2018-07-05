@@ -15,7 +15,10 @@ mv /var/www/images/* /var/www/tkl-webcp/images
 rm -rf /var/www/images
 
 #Adding additional information about preconfigured ports (temporary) until workaround.
-sed -i 's/^\(registerName=\)/\1TurnKey Mumble Server/g' /etc/mumble-server.ini
+sed -i 's/.*registerName=.*/registername=TurnKey\ Mumble\ Server/g' /etc/mumble-server.ini
+
+#Enable ice interface for mumble in mumble-server.ini
+sed -i 's/.*ice=.*/ice=\"tcp -h 0.0.0.0 -p 6502\"/g' /etc/mumble-server.ini
 
 phpenmod IcePHP
 echo 'include_path=/usr/share/php/Ice' >> /etc/php/7.0/apache2/conf.d/20-IcePHP.ini
