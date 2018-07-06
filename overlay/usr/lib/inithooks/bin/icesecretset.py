@@ -34,10 +34,10 @@ def main():
     if not password:
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
-            "Mumble Ice Secret Write For Using Web Interfaces",
+            "Mumble Ice Secret Write For ICE Administration",
             "Enter icesecretwrite.")
     
-    system('sed', '-i', "s/^\(icesecretwrite=\).*$/\1'%s'/" % password, '/etc/mumble-server.ini')
+	system('sed', '-i', "s/.*icesecretwrite=.*/icesecretwrite=%s/g" % password, '/etc/mumble-server.ini')
 
     for i in ('mumble-server', 'apache2'):
         system('service', i, 'restart')

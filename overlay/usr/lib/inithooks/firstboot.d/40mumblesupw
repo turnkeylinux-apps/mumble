@@ -1,6 +1,6 @@
 
 #!/bin/bash -e
-# set wordpress admin password and email
+# set superuser password for mumble-server
 
 . /etc/default/inithooks
 
