@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Set Mumble Server Default Super User password
 Option:
     --pass=     unless provided, will ask interactively
@@ -7,21 +7,21 @@ Option:
 import sys
 import getopt
 
-from executil import system
 from dialog_wrapper import Dialog
+import subprocess
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "h",
                                        ['help', 'pass='])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     password = ""
@@ -37,8 +37,8 @@ def main():
             "Mumble Server SuperUser Password",
             "Enter SuperUser Password.")
     
-    system('murmurd', '-ini', '/etc/mumble-server.ini', '-supw', password)
-    system('service', 'mumble-server', 'restart')
+    subprocess.run(['murmurd', '-ini', '/etc/mumble-server.ini', '-supw', password])
+    subprocess.run(['service', 'mumble-server', 'restart'])
 
 if __name__ == "__main__":
     main()
