@@ -37,7 +37,7 @@ def main():
             "Mumble Ice Secret Write For ICE Administration",
             "Enter icesecretwrite.")
     
-	subprocess.run(['sed', '-i', "s/.*icesecretwrite=.*/icesecretwrite=%s/g" % password, '/etc/mumble-server.ini'])
+        subprocess.run(['sed', '-i', "s/.*icesecretwrite=.*/icesecretwrite=%s/g" % password, '/etc/mumble-server.ini'])
 
     for i in ('mumble-server', 'apache2'):
         subprocess.run(['service', i, 'restart'])
