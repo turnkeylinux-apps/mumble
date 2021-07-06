@@ -51,7 +51,7 @@
 			  Mumble and Mumble Server</a>
                         </li>
                         <li><a
-                        href="https://github.com/MPTMG/Mumble">
+                        href="https://github.com/turnkeylinux-apps/mumble">
                         TurnKey Mumble Repository</a>
 			</li>
                     </ul>
