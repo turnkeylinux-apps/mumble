@@ -1,3 +1,12 @@
+turnkey-mumble-16.2 (UNRELEASED) turnkey; urgency=low
+
+  * ...
+
+  * Fixes to landing page - closes #1580.
+    [ Stefan Davis <stefan@turnkeylinux.org> ]
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Wed, 04 Aug 2021 08:44:14 +1000
+
 turnkey-mumble-16.1 (1) turnkey; urgency=low
 
   * Update mumble-server to latest from debian repos. Currently at version 
