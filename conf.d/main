@@ -21,7 +21,7 @@ sed -i 's/.*registerName=.*/registername=TurnKey\ Mumble\ Server/g' /etc/mumble-
 sed -i 's/.*ice=.*/ice=\"tcp -h 0.0.0.0 -p 6502\"/g' /etc/mumble-server.ini
 
 phpenmod ice
-echo 'include_path=/usr/share/php/Ice' >> /etc/php/7.4/apache2/conf.d/20-IcePHP.ini
+echo 'include_path=/usr/share/php/Ice' >> /etc/php/?.?/apache2/conf.d/20-ice.ini
 
 systemctl enable murmurdautofirewall || update-rc.d murmurdautofirewall defaults
 
