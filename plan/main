@@ -3,8 +3,8 @@
 apache2
 webmin-apache
 
-php7.4
-libapache2-mod-php7.4
+php
+libapache2-mod-php
 webmin-phpini
 libperl4-corelibs-perl /* php-common depends (via lsof) */
 
