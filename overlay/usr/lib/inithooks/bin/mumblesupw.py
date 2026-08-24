@@ -36,9 +36,20 @@ def main():
         password = d.get_password(
             "Mumble Server SuperUser Password",
             "Enter SuperUser Password.")
-    
-    subprocess.run(['murmurd', '-ini', '/etc/mumble-server.ini', '-supw', password])
-    subprocess.run(['service', 'mumble-server', 'restart'])
+
+    subprocess.run(['service', 'mumble-server', 'stop'], check=True)
+    subprocess.run(
+        [
+            'runuser', '--user', 'mumble-server', '--',
+            '/usr/bin/mumble-server',
+            '-ini', '/etc/mumble/mumble-server.ini',
+            '-readsupw',
+        ],
+        input=password + '\n',
+        text=True,
+        check=True,
+    )
+    subprocess.run(['service', 'mumble-server', 'start'], check=True)
 
 if __name__ == "__main__":
     main()

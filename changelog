@@ -1,3 +1,18 @@
+turnkey-mumble-19.0 (1) turnkey; urgency=low
+
+  * Upgrade the base distribution to Debian 13/Trixie.
+
+  * Update Mumble Server to Debian's 1.5 series and PHP to 8.4.
+
+  * Follow Debian's renamed Mumble executable and configuration path when
+    setting the first-boot SuperUser password and Ice write secret.
+
+  * Refresh the web control panel and administration documentation.
+
+  * See the TurnKey Core 19.0 changelog for changes common to all appliances.
+
+ -- TurnKey Linux release engineering <release@turnkeylinux.org>  Mon, 24 Aug 2026 00:00:00 +0000
+
 turnkey-mumble-18.0 (1) turnkey; urgency=low
 
   * Update Mumbleto latest available version from Debian apt repos.
