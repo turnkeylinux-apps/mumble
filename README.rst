@@ -23,8 +23,9 @@ and on top of that:
     - A TurnKey web control panel with a link to Webmin.
 
     **Note:** A browser-based Mumble administration interface is not
-    included. Administrators can use the official Mumble client or an
+    included. Administrators can use the official Mumble client or a local
     Ice-based tool described in the `Mumble administration documentation`_.
+    Use an SSH tunnel when an Ice tool runs on another system.
 
 Credentials *(passwords set at first boot)*
 -------------------------------------------

@@ -23,11 +23,11 @@ php_ice_version=$(dpkg-query -W -f='${Version}' php-zeroc-ice)
 
 grep -Fxq 'registerName=TurnKey Mumble Server' \
     /etc/mumble/mumble-server.ini
-grep -Fxq 'ice="tcp -h 0.0.0.0 -p 6502"' \
+grep -Fxq 'ice="tcp -h 127.0.0.1 -p 6502"' \
     /etc/mumble/mumble-server.ini
 grep -Fxq "icesecretwrite=$password" /etc/mumble/mumble-server.ini
 php -m | grep -Fxiq ice
-ss -ltn | awk '$4 ~ /:6502$/ { found=1 } END { exit !found }'
+ss -ltn | awk '$4 == "127.0.0.1:6502" { found=1 } END { exit !found }'
 ss -lun | awk '$4 ~ /:64738$/ { found=1 } END { exit !found }'
 
 curl --fail --silent --show-error http://127.0.0.1/ >"$response"
@@ -132,7 +132,7 @@ grep -Rqs '^Suites: trixie' /etc/apt/sources.list.d
 cat >"$result" <<EOF
 package_source=Debian 13 Trixie APT repositories for Mumble Server, Apache, PHP and ZeroC Ice; TurnKey APT for Webmin modules
 installed_version=mumble-server $mumble_version; apache2 $apache_version; php-zeroc-ice $php_ice_version
-runtime_checks=normal init; Mumble TCP TLS $tls_version with certificate $certificate_sha256; SuperUser protocol authentication; UDP voice listener; Ice endpoint and first-boot write secret; HTTP and HTTPS web control panel; Webmin link and modules
+runtime_checks=normal init; Mumble TCP TLS $tls_version with certificate $certificate_sha256; SuperUser protocol authentication; UDP voice listener; loopback Ice endpoint and first-boot write secret; HTTP and HTTPS web control panel; Webmin link and modules
 updater_command=apt-get update; apt-cache policy mumble-server apache2 php-zeroc-ice
 updater_result=signed metadata refreshed; eligible candidates found; installed versions unchanged
 updater_channel=Debian Trixie and TurnKey Trixie APT repositories
