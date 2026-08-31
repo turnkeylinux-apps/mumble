@@ -14,14 +14,14 @@ mkdir /var/www/tkl-webcp/images
 mv /var/www/images/* /var/www/tkl-webcp/images
 rm -rf /var/www/images
 
-#Adding additional information about preconfigured ports (temporary) until workaround.
-sed -i 's/.*registerName=.*/registername=TurnKey\ Mumble\ Server/g' /etc/mumble-server.ini
+# Add the appliance name to Mumble's server configuration.
+sed -Ei 's|^[;#]?registerName=.*|registerName=TurnKey Mumble Server|' \
+    /etc/mumble/mumble-server.ini
 
-#Enable ice interface for mumble in mumble-server.ini
-sed -i 's/.*ice=.*/ice=\"tcp -h 0.0.0.0 -p 6502\"/g' /etc/mumble-server.ini
+# Enable the Ice administration interface.
+sed -Ei 's|^[;#]?ice=.*|ice="tcp -h 127.0.0.1 -p 6502"|' \
+    /etc/mumble/mumble-server.ini
 
 phpenmod ice
-echo 'include_path=/usr/share/php/Ice' >> /etc/php/?.?/apache2/conf.d/20-ice.ini
 
 systemctl enable murmurdautofirewall || update-rc.d murmurdautofirewall defaults
-

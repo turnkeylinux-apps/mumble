@@ -6,6 +6,8 @@ Option:
 
 import sys
 import getopt
+from pathlib import Path
+import re
 
 from libinithooks.dialog_wrapper import Dialog
 import subprocess
@@ -36,11 +38,19 @@ def main():
         password = d.get_password(
             "Mumble Ice Secret Write For ICE Administration",
             "Enter icesecretwrite.")
-    
-        subprocess.run(['sed', '-i', "s/.*icesecretwrite=.*/icesecretwrite=%s/g" % password, '/etc/mumble-server.ini'])
 
-    for i in ('mumble-server', 'apache2'):
-        subprocess.run(['service', i, 'restart'])
+    config = Path('/etc/mumble/mumble-server.ini')
+    content = config.read_text()
+    content, count = re.subn(
+        r'(?m)^[;#]?icesecretwrite=.*$',
+        lambda _: 'icesecretwrite=%s' % password,
+        content,
+    )
+    if count != 1:
+        raise RuntimeError('unable to set Mumble Ice write secret')
+    config.write_text(content)
+
+    subprocess.run(['service', 'mumble-server', 'restart'], check=True)
 
 if __name__ == "__main__":
     main()
